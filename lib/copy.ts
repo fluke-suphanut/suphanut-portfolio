@@ -1,4 +1,9 @@
 // UI labels that are not rows in the DB. Wording comes from content-pack.md and design/00-shared.md section 3.
+import downloads from "./downloads.json";
+
+// CV and resume PDFs offered on /d. `npm run media:import-cv` copies them into public/; git ignores them.
+export const DOWNLOADS = downloads.map((d) => ({ ...d, href: `/${d.file}` }));
+
 export const SECTIONS = [
   { id: "projects", title: "Projects" },
   { id: "smaller-projects", title: "Smaller projects" },

@@ -8,7 +8,7 @@ import Link from "next/link";
 import { preload } from "react-dom";
 import type { CSSProperties, ReactNode } from "react";
 import { featureGroups, getContent, isPublicBuild, type Metric, type Project, type StoryLine } from "@/lib/content";
-import { AUTOMATION_LEAD, D_LABELS, sectionTitle, type SectionId } from "@/lib/copy";
+import { AUTOMATION_LEAD, D_LABELS, DOWNLOADS, sectionTitle, type SectionId } from "@/lib/copy";
 import MotionRuntime from "@/components/motion-runtime";
 import { Bullets, MetricProse, MetricTile, ProjectBullets, SkipLink } from "@/components/shared";
 import { Arrow, CircleText, DotGrid, Pin, Starburst, Underline } from "./marks";
@@ -65,6 +65,16 @@ function Heading({ id, title, accent, className }: { id: string; title: string; 
 function Pill({ href, children, tone = "primary", nav }: { href: string; children: ReactNode; tone?: "primary" | "dark"; nav?: string }) {
   return (
     <a className={`pill pill-${tone}`} href={href} data-nav={nav}>
+      <span>{children}</span>
+      <Arrow className="pill-arrow" />
+    </a>
+  );
+}
+
+// Downloads the PDF under its own file name; the arrow turns to point down.
+function DownloadPill({ href, file, children, tone = "primary" }: { href: string; file: string; children: ReactNode; tone?: "primary" | "dark" }) {
+  return (
+    <a className={`pill pill-${tone} pill-download`} href={href} download={file} type="application/pdf">
       <span>{children}</span>
       <Arrow className="pill-arrow" />
     </a>
@@ -315,7 +325,14 @@ export default async function EditorialPage() {
               </h1>
               <Underline className="name-underline" />
               <p className="tagline">{profile.tagline}</p>
-              <Pill href="#projects">{sectionTitle("projects")}</Pill>
+              <div className="hero-actions">
+                <Pill href="#projects">{sectionTitle("projects")}</Pill>
+                {DOWNLOADS.map((d) => (
+                  <DownloadPill key={d.file} href={d.href} file={d.file} tone="dark">
+                    {d.button}
+                  </DownloadPill>
+                ))}
+              </div>
             </div>
             <CircleText text={D_LABELS.circle} className="circle-text" />
             <div className="portrait">
@@ -542,6 +559,16 @@ export default async function EditorialPage() {
                   <a className="text-link" href={profile.githubUrl} rel="me noopener">
                     {github}
                   </a>
+                </dd>
+              </div>
+              <div>
+                <dt className="label">PDF</dt>
+                <dd className="contact-downloads">
+                  {DOWNLOADS.map((d) => (
+                    <DownloadPill key={d.file} href={d.href} file={d.file} tone="dark">
+                      {d.short}
+                    </DownloadPill>
+                  ))}
                 </dd>
               </div>
               <div>

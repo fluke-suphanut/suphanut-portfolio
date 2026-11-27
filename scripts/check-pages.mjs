@@ -1,7 +1,8 @@
 // Browser checks for the built site (run against `npx wrangler dev`):
 //   AC1 sections and counts, AC4 motion + reduced motion, AC6 demo captions, AC9 no horizontal scroll.
 //   D stories: 6 projects in order, each told in 4 steps. D shows no grade badges at all (owner request after
-//   the 2026-11-26 fact check); A-C keep them.
+//   the 2026-11-26 fact check); A-C keep them. D downloads: CV and resume buttons in the hero and in Contact,
+//   and both PDFs (lib/downloads.json) are served.
 //   With --pack <content-pack.md> (AC2 on /d): every text on /d that comes from the content pack (summary,
 //   hero metrics and footnote, skill groups, stories, small cards, n8n) matches it word for word, and nothing
 //   extra is shown.
@@ -10,6 +11,8 @@
 import { readFile } from "node:fs/promises";
 import { chromium } from "playwright-core";
 import { parsePack } from "./content-pack.mjs";
+
+const DOWNLOADS = JSON.parse(await readFile(new URL("../lib/downloads.json", import.meta.url), "utf8"));
 
 const argv = process.argv.slice(2);
 const packAt = argv.indexOf("--pack");
@@ -95,9 +98,11 @@ try {
     }, scope);
     // D shows the content pack's 4 skill groups (27 chips); A-C the flat list of 22
     const skills = route === D ? 27 : 22;
+    // contact rows: email, GitHub, location; D adds the CV and resume downloads
+    const contact = route === D ? 4 : 3;
     const ok =
       !!s.h1 && s.heroMetrics === 4 && s.projects === 6 && s.cards === 3 && s.automation === 4 &&
-      s.timeline === 3 && s.skills === skills && s.contact === 3 && s.mailto === 1;
+      s.timeline === 3 && s.skills === skills && s.contact === contact && s.mailto === 1;
     check("AC1", route, `hero, 6 projects, 3 cards, 4 n8n, timeline, ${skills} skills, contact`, ok, JSON.stringify(s));
     if (route === D) {
       // owner's order (content-pack 2026-11-25): Projects -> n8n -> small cards -> Experience -> Contact
@@ -181,6 +186,26 @@ try {
       }));
       check("D-grades", route, `0 grade badges on the page (found ${g.badges}), footnote under the numbers`,
         g.badges === 0 && g.dataGrade === 0 && g.legend === 0 && g.words === 0 && g.footnote === 1, JSON.stringify(g));
+
+      // ---- D downloads: the CV and resume buttons in the hero and in Contact download real PDFs under their names
+      const dl = await page.evaluate(() =>
+        [...document.querySelectorAll("a[download]")].map((a) => ({
+          where: a.closest("#top") ? "hero" : a.closest("#contact") ? "contact" : "other",
+          href: a.getAttribute("href"),
+          download: a.getAttribute("download"),
+        })),
+      );
+      const files = DOWNLOADS.map((d) => d.file);
+      const served = await Promise.all(files.map(async (f) => {
+        const res = await fetch(new URL(`/${f}`, base));
+        const head = Buffer.from(await res.arrayBuffer()).subarray(0, 5).toString("latin1");
+        return { f, status: res.status, type: res.headers.get("content-type"), pdf: head === "%PDF-" };
+      }));
+      const placed = ["hero", "contact"].every((w) =>
+        files.every((f) => dl.some((d) => d.where === w && d.href === `/${f}` && d.download === f)));
+      check("D-downloads", route, `CV and resume buttons in hero and contact (${dl.length} links), PDFs served`,
+        placed && dl.length === 2 * files.length && served.every((s) => s.status === 200 && s.pdf && /pdf/.test(s.type ?? "")),
+        JSON.stringify({ dl, served }));
     }
 
     // ---- AC2 (partial, A-C): numbers repeated in the hero summary carry the same badge as their metric tile

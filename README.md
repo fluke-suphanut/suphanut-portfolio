@@ -73,7 +73,10 @@ npm run preview     # http://localhost:8787
 
 The public build contains design D only.
 
+The page has **Download CV** and **Download resume** buttons. The PDFs are not in this repo, because they carry a phone number: git ignores `public/*.pdf`. Copy them in before the public build, which fails without them. The file names are in [`lib/downloads.json`](lib/downloads.json).
+
 ```bash
+npm run media:import-cv -- <folder-with-the-pdfs>   # copies Suphanut-Meeyindee-CV.pdf and Suphanut-Meeyindee-Resume.pdf into public/
 npm run build:public      # writes out-public/
 npm run preview:public    # http://localhost:8788
 ```
@@ -104,7 +107,7 @@ Start the matching preview server before you run a check that takes a URL.
 | `npm run lint` | ESLint |
 | `npm run build` | TypeScript, and the content guard: the row count of every section and the shape of every project story |
 | `npm run check:routes -- [<base>] [--public]` | Local: `/`, `/a`, `/b`, `/c`, and `/d` answer 200, and an unknown path answers 404. With `--public`: `/` answers 200, `/a` `/b` `/c` answer 404, `/d` redirects to `/`, and the page has a title, a description, and no `noindex`. |
-| `npm run check:pages -- [<base>] [--public] [--pack <content-pack.md>]` | Sections and counts, project stories, lazy images, no grade badges on design D, reduced motion, image captions, and no horizontal scroll at 375 px and 1440 px. With `--pack`, every line on design D must match the content pack word for word. |
+| `npm run check:pages -- [<base>] [--public] [--pack <content-pack.md>]` | Sections and counts, project stories, lazy images, no grade badges on design D, the CV and resume download buttons and their PDFs, reduced motion, image captions, and no horizontal scroll at 375 px and 1440 px. With `--pack`, every line on design D must match the content pack word for word. |
 | `npm run check:leaks -- <n8n-inventory.md> [out] [--images <README.md>]` | Text that must never ship: home-directory paths, private IP addresses, Thai mobile numbers, evidence codes, n8n workflow IDs, and the words in your private rules file. With `--images`, every image must be a demo drawing, an image named in the generated-images README, or the site icon. |
 | `npm run screenshots -- <base> <out-dir> [/a,/b,/c,/d]` | Takes full-page PNGs at 1440 px and 375 px. |
 
@@ -114,6 +117,7 @@ Some checks read files that are not in this repo, because those files hold priva
 
 - `check:leaks` reads its word list (company domains, internal repository names, and similar words) from `scripts/leak-rules.local.json`, which git ignores. Copy [`scripts/leak-rules.example.json`](scripts/leak-rules.example.json) to that name and put in your own words. Without the file, the check refuses to run. The check also needs a Markdown table with the n8n workflow IDs in its first column.
 - `check:pages --pack` needs the content pack, the private source document of every line on the site.
+- `check:pages` expects the CV and resume PDFs in the build (see [Build the public site and deploy it](#build-the-public-site-and-deploy-it)).
 
 ## Edit the content
 

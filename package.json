@@ -16,7 +16,8 @@
     "check:routes": "node scripts/check-routes.mjs",
     "screenshots": "node scripts/screenshots.mjs",
     "check:pages": "node scripts/check-pages.mjs",
-    "media:import-d": "node scripts/import-d-assets.mjs"
+    "media:import-d": "node scripts/import-d-assets.mjs",
+    "media:import-cv": "node scripts/import-cv.mjs"
   },
   "dependencies": {
     "@react-three/fiber": "^9.8.2",

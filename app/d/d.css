@@ -44,6 +44,9 @@
 .motion-ok .vd .pill { transition: background-color 150ms var(--ease-std), color 150ms var(--ease-std); }
 .motion-ok .vd .pill-arrow { transition: transform 150ms var(--ease-std); }
 .motion-ok .vd .pill:hover .pill-arrow, .motion-ok .vd .pill:focus-visible .pill-arrow { transform: translateX(4px); }
+/* download pills: the arrow points down, and moves down on hover */
+.vd .pill-download .pill-arrow { transform: rotate(90deg); }
+.motion-ok .vd .pill-download:hover .pill-arrow, .motion-ok .vd .pill-download:focus-visible .pill-arrow { transform: rotate(90deg) translateX(4px); }
 
 /* nav */
 .vd .nav { position: sticky; top: 0; z-index: 50; background: rgba(243, 235, 221, 0.92); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); border-bottom: 2px solid var(--ink); }
@@ -76,6 +79,7 @@
 .vd .display-name span { display: block; }
 .vd .name-underline { display: block; width: min(420px, 90%); height: 24px; margin: 14px 0 20px; color: var(--red); overflow: visible; }
 .vd .tagline { font-size: 20px; line-height: 30px; color: var(--ink-2); max-width: 30ch; margin-bottom: 28px; }
+.vd .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; }
 .vd .circle-text { position: absolute; left: calc(50% - 60px); top: 58%; width: 120px; height: 120px; z-index: 3; overflow: visible; }
 .vd .circle-text text { font: 700 11px/1 var(--font-sans), sans-serif; font-stretch: 75%; letter-spacing: 0.18em; text-transform: uppercase; fill: var(--ink); }
 .vd .circle-text-star { color: var(--red); }
@@ -287,6 +291,7 @@
 .vd .contact-list { display: flex; flex-direction: column; gap: 12px; }
 .vd .contact-list div { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
 .vd .contact-list dt.label { min-width: 72px; }
+.vd .contact-downloads { display: flex; flex-wrap: wrap; gap: 12px; }
 .vd .pill-email { text-transform: none; letter-spacing: 0.01em; font-size: 18px; min-height: 56px; padding: 0 28px; max-width: 100%; }
 .vd .pill-email span { overflow-wrap: anywhere; white-space: normal; }
 .vd .text-link { display: inline-flex; align-items: center; min-height: 44px; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px; overflow-wrap: anywhere; }

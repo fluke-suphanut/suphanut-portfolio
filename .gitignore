@@ -51,5 +51,8 @@ next-env.d.ts
 # wrangler local state
 /.wrangler/
 
+# CV and resume PDFs carry a phone number: copied in by `npm run media:import-cv`, never committed
+/public/*.pdf
+
 # private local files (word lists, notes): see *.example.json for the shape
 *.local.*

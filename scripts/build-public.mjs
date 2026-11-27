@@ -13,6 +13,11 @@ const repo = process.cwd();
 const stage = path.join(repo, ".public-build");
 const out = path.join(repo, "out-public");
 if (!process.env.DATABASE_URL) throw new Error("DATABASE_URL is not set");
+// The download buttons on / link to these PDFs; they are git-ignored, so check they were copied in.
+const downloads = JSON.parse(await readFile(path.join(repo, "lib/downloads.json"), "utf8"));
+const missing = [];
+for (const { file } of downloads) await readFile(path.join(repo, "public", file)).catch(() => missing.push(file));
+if (missing.length) throw new Error(`missing in public/: ${missing.join(", ")}. Run npm run media:import-cv -- <cv-dir> first`);
 
 await rm(stage, { recursive: true, force: true });
 await mkdir(stage);
