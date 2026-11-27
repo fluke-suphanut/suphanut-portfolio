@@ -17,7 +17,9 @@
     "screenshots": "node scripts/screenshots.mjs",
     "check:pages": "node scripts/check-pages.mjs",
     "media:import-d": "node scripts/import-d-assets.mjs",
-    "media:import-cv": "node scripts/import-cv.mjs"
+    "media:import-cv": "node scripts/import-cv.mjs",
+    "release:cv": "node scripts/release-cv.mjs",
+    "test:scripts": "node --test scripts/*.test.mjs"
   },
   "dependencies": {
     "@react-three/fiber": "^9.8.2",

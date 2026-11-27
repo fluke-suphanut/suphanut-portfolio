@@ -81,6 +81,8 @@ npm run build:public      # writes out-public/
 npm run preview:public    # http://localhost:8788
 ```
 
+To publish new PDFs, use `npm run release:cv` instead of the manual steps. It releases only the files whose sha256 QA approved, and it checks the live site after the deploy. See [docs/release-cv.md](docs/release-cv.md).
+
 `npm run build:public` ([`scripts/build-public.mjs`](scripts/build-public.mjs)) works on a copy of the sources in `.public-build/`. On that copy, it does these steps:
 
 1. It removes `/a`, `/b`, `/c`, and the chooser, and serves design D at `/`.
@@ -110,8 +112,9 @@ Start the matching preview server before you run a check that takes a URL.
 | `npm run check:pages -- [<base>] [--public] [--pack <content-pack.md>]` | Sections and counts, project stories, lazy images, no grade badges on design D, the CV and resume download buttons and their PDFs, reduced motion, image captions, and no horizontal scroll at 375 px and 1440 px. With `--pack`, every line on design D must match the content pack word for word. |
 | `npm run check:leaks -- <n8n-inventory.md> [out] [--images <README.md>]` | Text that must never ship: home-directory paths, private IP addresses, Thai mobile numbers, evidence codes, n8n workflow IDs, and the words in your private rules file. With `--images`, every image must be a demo drawing, an image named in the generated-images README, or the site icon. |
 | `npm run screenshots -- <base> <out-dir> [/a,/b,/c,/d]` | Takes full-page PNGs at 1440 px and 375 px. |
+| `npm run test:scripts` | Unit tests of the release script, against temporary files and a local server |
 
-There are no unit tests. The checks run against the built pages instead.
+Apart from the release script tests, there are no unit tests. The checks run against the built pages instead.
 
 Some checks read files that are not in this repo, because those files hold private details:
 
@@ -131,10 +134,11 @@ components/          shared parts (badges, demo figure, metric tile) and the mot
 lib/content.ts       the only module that reads the database, and the build guard
 lib/copy.ts          interface text that is not stored in the database
 supabase/migrations  schema in core PostgreSQL; `npm run db:migrate` applies every file in name order
+supabase/rollback    reverse scripts, one per migration that can be undone; never applied by db:migrate
 supabase/seed.sql    the site content
 public/d/            images of design D
 public/demo/         demo drawings with made-up data, used by designs A to C
-scripts/             public build, checks, screenshots, image import
+scripts/             public build, CV release, checks, screenshots, image import
 docs/                architecture decision record, content model, banner
 ```
 
