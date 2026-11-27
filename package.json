@@ -1,0 +1,44 @@
+{
+  "name": "suphanut-portfolio",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "lint": "eslint",
+    "db:migrate": "for f in supabase/migrations/*.sql; do psql -v ON_ERROR_STOP=1 \"$DATABASE_URL\" -f \"$f\" || exit 1; done",
+    "db:seed": "psql -v ON_ERROR_STOP=1 \"$DATABASE_URL\" -f supabase/seed.sql",
+    "media:import": "node scripts/import-demo-media.mjs",
+    "preview": "wrangler dev --port 8787",
+    "build:public": "node scripts/build-public.mjs",
+    "preview:public": "wrangler dev --config wrangler.public.jsonc --port 8788",
+    "check:leaks": "node scripts/check-leaks.mjs",
+    "check:routes": "node scripts/check-routes.mjs",
+    "screenshots": "node scripts/screenshots.mjs",
+    "check:pages": "node scripts/check-pages.mjs",
+    "media:import-d": "node scripts/import-d-assets.mjs"
+  },
+  "dependencies": {
+    "@react-three/fiber": "^9.8.2",
+    "gsap": "^3.15.1",
+    "next": "16.4.6",
+    "pg": "^8.23.1",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "server-only": "^0.0.1",
+    "three": "^0.187.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/pg": "^8.23.1",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@types/three": "^0.187.0",
+    "eslint": "^9",
+    "eslint-config-next": "16.4.6",
+    "playwright-core": "^1.65.1",
+    "sharp": "^0.35.5",
+    "typescript": "^5",
+    "wrangler": "^4.167.0"
+  }
+}

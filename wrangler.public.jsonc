@@ -1,0 +1,9 @@
+{
+  // Public deploy (PM decision 2026-11-26): same Worker as wrangler.jsonc, but it serves out-public/, the
+  // output of `npm run build:public` (design D only; /a /b /c answer 404; /d redirects to /).
+  // Assets only, no Worker script (ADR-0001 section 2). URL: https://suphanut-portfolio.<account>.workers.dev
+  "name": "suphanut-portfolio",
+  "compatibility_date": "2026-11-01",
+  "workers_dev": true,
+  "assets": { "directory": "./out-public", "not_found_handling": "404-page" }
+}

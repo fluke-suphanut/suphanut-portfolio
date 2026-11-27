@@ -1,0 +1,21 @@
+{
+  "_note": "Example only. Copy to scripts/leak-rules.local.json (git-ignored) and replace the made-up values with your own private words.",
+  "rules": [
+    {
+      "name": "company domain",
+      "pattern": "example-corp\\.test",
+      "flags": "gi"
+    },
+    {
+      "name": "internal repo names",
+      "pattern": "internal-repo-one|internal-repo-two",
+      "flags": "gi"
+    },
+    {
+      "name": "provenance file names (html/txt)",
+      "pattern": "draft-notes\\.md|ticket-X-\\d+",
+      "flags": "gi",
+      "only": "\\.(html|txt)$"
+    }
+  ]
+}

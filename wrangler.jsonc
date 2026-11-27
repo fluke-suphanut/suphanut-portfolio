@@ -1,0 +1,6 @@
+{
+  // ADR-0001 section 2: assets only, no Worker script. `npx wrangler dev` previews ./out locally.
+  "name": "suphanut-portfolio",
+  "compatibility_date": "2026-11-01",
+  "assets": { "directory": "./out", "not_found_handling": "404-page" }
+}
